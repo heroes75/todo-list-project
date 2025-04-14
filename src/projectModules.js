@@ -4,15 +4,18 @@
 
 const allProject = [];
 export const createProject = (nameProject) => class {
-    #titleProject = nameProject
+    //#titleProject = nameProject
     constructor(title, description, dueDate, priority, notes, complete) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.notes = notes;
-        this.complete = complete
+        this.complete = complete;
+        this.id = crypto.randomUUID();
+        //this.getPrivateTitle = getPrivateTitle.bind(this)
     }
+
     reeditTask(title, description, dueDate, priority, notes, complete) {
         this.title = title;
         this.description = description;
@@ -21,8 +24,13 @@ export const createProject = (nameProject) => class {
         this.notes = notes;
         this.complete = complete
     }
+
     getPrivateTitle() {
-        return this.#titleProject
+        return nameProject
+    }
+
+    ToggleComplete() {
+        this.complete = this.complete === true ? false : true
     }
 }
 
