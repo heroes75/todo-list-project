@@ -4,45 +4,7 @@ import allProject, {createProject, addProjectToAllProject} from "./projectModule
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js"
 
 
-
-
-/*const createProject = function(nameProject) {
-    let titleProject = nameProject;
-    function createObject (title, description, dueDate, priority, notes) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.notes = notes;
-    }
-    return {titleProject, createObject}
-
-}*/
-
-
-const task = {
-    title: "task",
-    description: "description",
-    dueDate: new Date(),
-    priority: "important",
-    notes: "notes"
-}
-
-console.log(yearsToMonths(17));
-console.log(formatDistanceToNowStrict(new Date(1994, 11, 29), {
-    unit: 'month',
-    roundingMethod: 'ceil'
-}));
-
-
-  //const namingProject = (Project) => Project = createProject();
-  //let Project = createProject("qwerty1");
-  //let Project2 = createProject("qwerty");
-  //let task1 = new Project("title", "description", new Date(), "important", "motes", false);
-  //let task4 = new Project("title", "description", new Date(), "important", "motes", false);
-  //let task3 = new Project2("title", "description", new Date(), "important", "motes", false);
-  //let task2 = new Project2("title", "description", new Date(), "medium", "motes", true)
-  
+/*
   addProjectToAllProject(createProject("qwerty1"));
   addProjectToAllProject(createProject("qwerty"));
   addProjectToAllProject(createProject("qwerty3"));
@@ -51,15 +13,19 @@ console.log(formatDistanceToNowStrict(new Date(1994, 11, 29), {
   addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5), "important", "motes", false));
   addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3), "low", "motes", false));
   addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29), "medium", "motes", true));
-
+*/
   //console.log(new Project().getPrivateTitle());
 
   //console.log(task1);
   //console.log(task2);
   //console.log(Project2);
-  const task1 = createTask("qwerty1", "title", "description", new Date(), "important", "motes", false);
+  /*const task1 = createTask("qwerty1", "title", "description", new Date(), "important", "motes", false);
   const task3 = createTask("qwerty3", "title3", "description3", new Date(), "important", "motes3", false);
-  addTaskToAllTask(task3)
+  const task6 = createTask("qwerty3", "6title3", "6description3", new Date(), "important", "motes3", true);
+  const task5 = createTask("qwerty3", "title35", "description35", new Date(2036, 6, 7), "important", "motes3", false);
+  addTaskToAllTask(task3);
+  addTaskToAllTask(task5);
+  addTaskToAllTask(task6);
   console.log(task1)
   console.log(new allProject[1]());
   console.log(allTask);
@@ -68,7 +34,7 @@ console.log(formatDistanceToNowStrict(new Date(1994, 11, 29), {
   console.log("sortTaskByPriority", sortTaskByPriority(allTask));
   console.log("filterTaskByProject", filterTaskByProject("qwerty1"));
   console.log("deleteTask, sortTaskByTittle", deleteTask(1, sortTaskByTittle(allTask)));
-  console.log("deleteTask, sortTaskByDuDate", deleteTask(1, sortTaskByDuDate(allTask)));
+  console.log("deleteTask, sortTaskByDuDate", deleteTask(1, sortTaskByDuDate(allTask)));*/
   /*console.log(allProject.forEach(function (el, index, array) {
     console.log(new el().getPrivateTitle());
     new el().getPrivateTitle();
@@ -76,10 +42,52 @@ console.log(formatDistanceToNowStrict(new Date(1994, 11, 29), {
 }, this))*/
  
 //make the todo-list in console
-console.log(`
-    PROJECT:
-    project name ${allProject.forEach(el => {
+
+/*setTimeout(() => {
+    //deleteTask(1, sortTaskByTittle(allTask));
+    deleteTask(0, filterTaskByProject("qwerty1"));
+    console.log(filterTaskByProject("qwerty1"));
+    console.log("////")
+    allProject.forEach(el => {
         console.log(new el().getPrivateTitle());
-        console.log(filterTaskByProject(new el().getPrivateTitle()).forEach(el => console.log(el.title)))
-    })}
-    `)
+        console.log(filterTaskByProject(new el().getPrivateTitle()).map(el => el.title).join("\n  "));
+    })
+}, 5000);*/
+
+const Navbar = (() => {
+    const navBar = document.createElement("div");
+    const h1 = document.createElement("h1")
+    navBar.setAttribute("id", "nav-bar");
+    h1.setAttribute("id", "nav-bar-h1");
+    h1.textContent = "YOUR TODO-LIST"
+    document.body.appendChild(navBar);
+    navBar.appendChild(h1)
+})();
+const box = document.createElement("div");
+box.setAttribute("id", "box");
+document.body.appendChild(box)
+
+const SideBar = (() => {
+    const sideBar = document.createElement("div");
+    const ul1 = document.createElement("ul");
+    const li1 = document.createElement("li");
+    const li2 = document.createElement("li");
+    const li3 = document.createElement("li");
+    const ul2 = document.createElement("ul")
+    sideBar.setAttribute("id", "side-bar");
+    ul1.setAttribute("id", "ul1");
+    ul2.setAttribute("id", "ul2");
+    li1.classList.add("side-bar-li");
+    li2.classList.add("side-bar-li");
+    li3.classList.add("side-bar-li");
+    li1.textContent = "ALL";
+    li2.textContent = "Complete TASK";
+    li3.textContent = "PROJECT";
+    box.appendChild(sideBar);
+    sideBar.appendChild(ul1);
+    ul1.appendChild(li1);
+    ul1.appendChild(li2);
+    ul1.appendChild(li3);
+    li3.appendChild(ul2);
+
+})()

@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+    border: 1px solid red;
+}
+body, html {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+#nav-bar {
+    background-color: red;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#box {
+    display: flex;
+}
