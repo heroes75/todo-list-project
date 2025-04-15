@@ -1,6 +1,9 @@
 
 import allProject, {addProjectToAllProject, createProject} from "./projectModules";
+import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js";
 
+
+export let arrayInbox = [];
 const SideBar = (() => {
     const sideBar = document.createElement("div");
     const ul1 = document.createElement("ul");
@@ -26,6 +29,9 @@ const SideBar = (() => {
     button1.textContent = "ALL";
     button2.textContent = "Complete TASK";
     button3.textContent = "PROJECT";
+    button1.addEventListener("click", () => {
+        arrayInbox = [...allTask]
+    })
     document.querySelector("#box").appendChild(sideBar);
     sideBar.appendChild(ul1);
     ul1.appendChild(li1);

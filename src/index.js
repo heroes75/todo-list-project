@@ -3,6 +3,7 @@ import { yearsToMonths, formatDistanceToNow, formatDistanceToNowStrict } from "d
 import allProject, {createProject, addProjectToAllProject} from "./projectModules";
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js";
 import sideBar from "./sideBarModule.js";
+import Inbox from "./inboxModule.js";
 
 
 
@@ -68,5 +69,6 @@ const box = document.createElement("div");
 box.setAttribute("id", "box");
 document.body.appendChild(box)
 
-sideBar()
+sideBar();
 
+Inbox()
