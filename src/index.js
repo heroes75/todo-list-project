@@ -1,10 +1,11 @@
 import "./styles.css";
 import { yearsToMonths, formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import allProject, {createProject, addProjectToAllProject} from "./projectModules";
-import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js"
+import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js";
+import sideBar from "./sideBarModule.js";
 
 
-/*
+
   addProjectToAllProject(createProject("qwerty1"));
   addProjectToAllProject(createProject("qwerty"));
   addProjectToAllProject(createProject("qwerty3"));
@@ -13,7 +14,7 @@ import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDat
   addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5), "important", "motes", false));
   addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3), "low", "motes", false));
   addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29), "medium", "motes", true));
-*/
+
   //console.log(new Project().getPrivateTitle());
 
   //console.log(task1);
@@ -67,27 +68,5 @@ const box = document.createElement("div");
 box.setAttribute("id", "box");
 document.body.appendChild(box)
 
-const SideBar = (() => {
-    const sideBar = document.createElement("div");
-    const ul1 = document.createElement("ul");
-    const li1 = document.createElement("li");
-    const li2 = document.createElement("li");
-    const li3 = document.createElement("li");
-    const ul2 = document.createElement("ul")
-    sideBar.setAttribute("id", "side-bar");
-    ul1.setAttribute("id", "ul1");
-    ul2.setAttribute("id", "ul2");
-    li1.classList.add("side-bar-li");
-    li2.classList.add("side-bar-li");
-    li3.classList.add("side-bar-li");
-    li1.textContent = "ALL";
-    li2.textContent = "Complete TASK";
-    li3.textContent = "PROJECT";
-    box.appendChild(sideBar);
-    sideBar.appendChild(ul1);
-    ul1.appendChild(li1);
-    ul1.appendChild(li2);
-    ul1.appendChild(li3);
-    li3.appendChild(ul2);
+sideBar()
 
-})()

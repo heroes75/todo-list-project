@@ -20,4 +20,9 @@ body {
 
 #box {
     display: flex;
+    flex-basis: 100%;
+}
+
+button {
+    background-color: transparent;
 }
