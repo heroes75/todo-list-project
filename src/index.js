@@ -71,4 +71,4 @@ document.body.appendChild(box)
 
 sideBar();
 
-Inbox()
+//Inbox()

@@ -1,6 +1,9 @@
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, filterTaskByComplete, deleteTask} from "./taskModule.js";
 import { arrayInbox } from "./sideBarModule.js";
-import sideBar, {button1, button2, button3, arrayButtonProject} from "./sideBarModule.js";
+import sideBar, {button1, button2, button3, arrayButtonProject, buttonAddProject} from "./sideBarModule.js";
+import { inputTest } from "./sideBarModule.js";
+
+
 
 const Inbox = () => {
     let arrayToSort = [];
@@ -34,19 +37,24 @@ const Inbox = () => {
         displayTaskToDOM(allTask, tasksContainer);
         arrayToSort = [...allTask];
     });
+
     button2.addEventListener("click", () => {
         select.value = "Select";
         displayTaskToDOM(filterTaskByComplete(allTask), tasksContainer);
         arrayToSort = [...filterTaskByComplete(allTask)];
     });
+
     arrayButtonProject.forEach(el => {
         el.addEventListener("click", (e) => {
+            e.preventDefault();
             select.value = "Select";
-            console.log("in array boutton", arrayButtonProject)
-            displayTaskToDOM(filterTaskByProject(el.dataset.name), tasksContainer)
+            console.log("in array boutton", el.textContent);
+            displayTaskToDOM(filterTaskByProject(el.dataset.name), tasksContainer);
             arrayToSort = [...filterTaskByProject(el.dataset.name)];
         })
     });
+
+    
     select.addEventListener("change", (e) => {
         switch (e.target.value) {
             case "Sort by Title":
@@ -59,12 +67,14 @@ const Inbox = () => {
                 displayTaskToDOM(sortTaskByPriority(arrayToSort), tasksContainer);
                 break;
             default:
-                displayTaskToDOM(arrayToSort, tasksContainer)
+                displayTaskToDOM(arrayToSort, tasksContainer);
                 break;
         }
     })
     displayTaskToDOM(arrayInbox, tasksContainer);
 }
+
+//fin inbox
 const displayTaskToDOM = (givenArray, container) => {
     container.textContent ="";
     givenArray.forEach(el => {
@@ -90,4 +100,5 @@ const displayTaskToDOM = (givenArray, container) => {
         task.appendChild(deleteButton);
     });
 }
+
 export default Inbox;
