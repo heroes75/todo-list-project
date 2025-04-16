@@ -2,17 +2,17 @@
 import allProject, {addProjectToAllProject, createProject} from "./projectModules";
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js";
 
-
 export let arrayInbox = [];
-const SideBar = (() => {
+export const button1 = document.createElement("button");
+export const button2 = document.createElement("button");
+export const button3 = document.createElement("button");
+export const arrayButtonProject = [];
+export const SideBar = (() => {
     const sideBar = document.createElement("div");
     const ul1 = document.createElement("ul");
     const li1 = document.createElement("li");
     const li2 = document.createElement("li");
     const li3 = document.createElement("li");
-    const button1 = document.createElement("button");
-    const button2 = document.createElement("button");
-    const button3 = document.createElement("button");
     const ul2 = document.createElement("ul")
     sideBar.setAttribute("id", "side-bar");
     ul1.setAttribute("id", "ul1");
@@ -29,9 +29,9 @@ const SideBar = (() => {
     button1.textContent = "ALL";
     button2.textContent = "Complete TASK";
     button3.textContent = "PROJECT";
-    button1.addEventListener("click", () => {
-        arrayInbox = [...allTask]
-    })
+    //button1.addEventListener("click", () => {
+    //    displayTaskToDOM([...allTask])
+    //})
     document.querySelector("#box").appendChild(sideBar);
     sideBar.appendChild(ul1);
     ul1.appendChild(li1);
@@ -41,10 +41,10 @@ const SideBar = (() => {
     ul1.appendChild(li3);
     li3.appendChild(button3);
     li3.appendChild(ul2);
-    displayProjectToDOM(ul2)
+    displayProjectToDOM(ul2);
 })
 
-const displayProjectToDOM = (ul) => {
+export const displayProjectToDOM = (ul) => {
     ul.textContent = "";
     allProject.forEach(el => {
         const li = document.createElement("li");
@@ -52,11 +52,13 @@ const displayProjectToDOM = (ul) => {
         button.classList.add("nav-bar-button");
         li.classList.add("side-bar-li");
         button.textContent = new el().getPrivateTitle();
+        button.dataset.name = new el().getPrivateTitle();
         li.appendChild(button);
         ul.appendChild(li);
+        arrayButtonProject.push(button)
+        console.log("in displayProjectToDOM", arrayButtonProject)
     })
     addProjectToDOM(ul)
-
 }
 
 const addProjectToDOM = (ul) => {
