@@ -11,10 +11,10 @@ import Inbox from "./inboxModule.js";
   addProjectToAllProject(createProject("qwerty"));
   addProjectToAllProject(createProject("qwerty3"));
   
-  addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3), "important", "monte christo", false));
-  addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5), "important", "motes", false));
-  addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3), "low", "motes", false));
-  addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29), "medium", "motes", true));
+  addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3), "High", false));
+  addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5), "High", false));
+  addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3), "Low", false));
+  addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29), "Medium", true));
 
   //console.log(new Project().getPrivateTitle());
 

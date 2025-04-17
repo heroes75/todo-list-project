@@ -91,17 +91,10 @@ export const SideBar = (() => {
         select.value = "Select";
         displayTaskToDOM(filterTaskByComplete(allTask), tasksContainer);
         arrayToSort = [...filterTaskByComplete(allTask)];
+        console.log(filterTaskByComplete(allTask))
     });
 
-    arrayButtonProject.forEach(el => {
-        el.addEventListener("click", (e) => {
-            e.preventDefault();
-            select.value = "Select";
-            console.log("in array boutton", el.textContent);
-            displayTaskToDOM(filterTaskByProject(el.dataset.name), tasksContainer);
-            arrayToSort = [...filterTaskByProject(el.dataset.name)];
-        })
-    });
+    
 
     
     select.addEventListener("change", (e) => {
@@ -143,9 +136,10 @@ const displayProjectToDOM = (ul) => {
         button.addEventListener("click", (e) => {
             e.preventDefault();
             //select.value = "Select";
-            console.log("in array boutton", el.textContent);
-            displayTaskToDOM(filterTaskByProject(el.textContent), tasksContainer);
-            arrayToSort = [...filterTaskByProject(el.textContent)];
+            console.log("in array boutton", e.target.textContent);
+            displayTaskToDOM(filterTaskByProject(e.target.textContent), tasksContainer);
+            addTAskToDOM(e.target.textContent);
+            arrayToSort = [...filterTaskByProject(e.target.textContent)];
         })
         ///////////////////
         li.appendChild(button);
@@ -225,7 +219,7 @@ const addProjectToDOM = (ul) => {
 
 }
 
-//invox function
+//inbox function
 const displayTaskToDOM = (givenArray, container) => {
     container.textContent ="";
     givenArray.forEach(el => {
@@ -252,4 +246,98 @@ const displayTaskToDOM = (givenArray, container) => {
     });
 }
 
+const addTAskToDOM = (nameProject) => {
+    const addTaskButton = document.createElement("button");
+    const formContainer = document.createElement("div");
+    const form = document.createElement("form");
+    const labelTitle = document.createElement("label");
+    const spanTitle = document.createElement("span");
+    const inputTitle = document.createElement("input");
+    const labelDate = document.createElement("label");
+    const spanDate = document.createElement("span");
+    const inputDate = document.createElement("input");
+    const labelDescription = document.createElement("label");
+    const spanDescription = document.createElement("span");
+    const inpuDescription = document.createElement("textarea");
+    const labelPriority = document.createElement("label");
+    const spanPriority = document.createElement("span");
+    const inputPriority = document.createElement("select");
+    const optionPriority1 = document.createElement("option");
+    const optionPriority2 = document.createElement("option");
+    const optionPriority3 = document.createElement("option");
+    const buttonValidationContainer = document.createElement("div");
+    const btnConfirm = document.createElement("button");
+    const btnCancel = document.createElement("button");
+    addTaskButton.setAttribute("id", "add-task-button");
+    formContainer.setAttribute("id", "form-container");
+    formContainer.setAttribute("hidden", "true");
+    form.setAttribute("id", "form-task");
+    inputDate.setAttribute("type", "datetime-local");
+    labelDescription.setAttribute("for", "description");
+    inpuDescription.setAttribute("id", "input-description");
+    inpuDescription.setAttribute("name", "description");
+    buttonValidationContainer.setAttribute("id", "button-validation-container");
+    btnConfirm.setAttribute("id", "btn-confirm");
+    btnCancel.setAttribute("id", "btn-cancel");
+    labelTitle.classList.add("label-task");
+    spanTitle.classList.add("span-task");
+    inputTitle.classList.add("input-task");
+    labelDate.classList.add("label-task");
+    spanDate.classList.add("span-task");
+    inputDate.classList.add("input-task");
+    spanDescription.classList.add("span-task");
+    labelPriority.classList.add("label-task");
+    spanPriority.classList.add("span-task");
+    inputPriority.classList.add("input-task");
+    addTaskButton.textContent = "Add Task";
+    spanTitle.textContent = "name";
+    spanDate.textContent = "Due Date";
+    spanDescription.textContent = "Description";
+    spanPriority.textContent = "Priority";
+    optionPriority1.textContent = "High";
+    optionPriority2.textContent = "Medium";
+    optionPriority3.textContent = "Low";
+    btnConfirm.textContent = "Confirm";
+    btnCancel.textContent = "Cancel";
+    tasksContainer.appendChild(addTaskButton);
+    tasksContainer.appendChild(formContainer);
+    formContainer.appendChild(form);
+    form.appendChild(labelTitle);
+    labelTitle.appendChild(spanTitle);
+    labelTitle.appendChild(inputTitle);
+    form.appendChild(labelDate);
+    labelDate.appendChild(spanDate);
+    labelDate.appendChild(inputDate);
+    form.appendChild(labelDescription);
+    labelDescription.appendChild(spanDescription);
+    labelDescription.appendChild(inpuDescription);
+    form.appendChild(labelPriority);
+    labelPriority.appendChild(spanPriority);
+    labelPriority.appendChild(inputPriority);
+    inputPriority.appendChild(optionPriority1);
+    inputPriority.appendChild(optionPriority2);
+    inputPriority.appendChild(optionPriority3);
+    formContainer.appendChild(buttonValidationContainer);
+    buttonValidationContainer.appendChild(btnConfirm);
+    buttonValidationContainer.appendChild(btnCancel);
+    addTaskButton.addEventListener("click", () => {
+        formContainer.toggleAttribute("hidden")
+        console.log(inputDate.value);
+        console.log(inputTitle.value);
+    })
+    const resetValue = () => {
+        inputDate.value = "";
+        inputTitle.value = "";
+        inpuDescription.value = "";
+        inputPriority.value = "High";
+    }
+    btnCancel.addEventListener("click", () => {
+        resetValue();
+        formContainer.toggleAttribute("hidden");
+    })
+    btnConfirm.addEventListener("click", () => {
+        addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
+        displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
+    })
+}
 export default SideBar;
