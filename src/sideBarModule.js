@@ -1,4 +1,5 @@
 
+//import { el } from "date-fns/locale";
 import allProject, {addProjectToAllProject, createProject} from "./projectModules";
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, filterTaskByComplete, deleteTask} from "./taskModule.js";
 
@@ -122,13 +123,14 @@ export const SideBar = (() => {
     
 })
 
-const displayProjectToDOM = (ul) => {
+const displayProjectToDOM = ((ul) => {
     ul.textContent = "";
     allProject.forEach(el => {
         //if(arrayButtonProject.some(ele => ele.textContent === (new el().getPrivateTitle()))) return;
         const li = document.createElement("li");
         const button = document.createElement("button");
         button.classList.add("nav-bar-button");
+        button.setAttribute("id", new el().getPrivateTitle());
         li.classList.add("side-bar-li");
         button.textContent = new el().getPrivateTitle();
         button.dataset.name = new el().getPrivateTitle();
@@ -144,13 +146,11 @@ const displayProjectToDOM = (ul) => {
         ///////////////////
         li.appendChild(button);
         ul.appendChild(li);
-        //if(!arrayButtonProject.some(el => el.textContent === button.textContent)) {
-            //arrayButtonProject.push(button);
-        //}
         console.log("in displayProjectToDOM", arrayButtonProject);
     })
     addProjectToDOM(ul)
-}
+
+})
 
 
 //const buttonAddProject = document.createElement("button");
@@ -243,10 +243,15 @@ const displayTaskToDOM = (givenArray, container) => {
         task.appendChild(taskTitle);
         task.appendChild(editButton);
         task.appendChild(deleteButton);
+        editButton.addEventListener("click", (e) => {
+            e.preventDefault()
+            reditTask(el, el.title, el.description, el.dueDate, el.priority)
+        })
     });
 }
 
 const addTAskToDOM = (nameProject) => {
+    let newEvent = new Event("click");
     const addTaskButton = document.createElement("button");
     const formContainer = document.createElement("div");
     const form = document.createElement("form");
@@ -290,6 +295,9 @@ const addTAskToDOM = (nameProject) => {
     spanPriority.classList.add("span-task");
     inputPriority.classList.add("input-task");
     addTaskButton.textContent = "Add Task";
+    ////default input
+    
+    ///default input
     spanTitle.textContent = "name";
     spanDate.textContent = "Due Date";
     spanDescription.textContent = "Description";
@@ -322,8 +330,6 @@ const addTAskToDOM = (nameProject) => {
     buttonValidationContainer.appendChild(btnCancel);
     addTaskButton.addEventListener("click", () => {
         formContainer.toggleAttribute("hidden")
-        console.log(inputDate.value);
-        console.log(inputTitle.value);
     })
     const resetValue = () => {
         inputDate.value = "";
@@ -338,6 +344,102 @@ const addTAskToDOM = (nameProject) => {
     btnConfirm.addEventListener("click", () => {
         addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
+        document.getElementById(nameProject).dispatchEvent(newEvent);
+        console.log(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false))
+    })
+}
+
+const reditTask = (taskObject, title = "", description = "", date = "", priority = "") => {
+    console.log(taskObject)
+    let newEvent = new Event("click");
+    const formContainer = document.createElement("div");
+    const form = document.createElement("form");
+    const labelTitle = document.createElement("label");
+    const spanTitle = document.createElement("span");
+    const inputTitle = document.createElement("input");
+    const labelDate = document.createElement("label");
+    const spanDate = document.createElement("span");
+    const inputDate = document.createElement("input");
+    const labelDescription = document.createElement("label");
+    const spanDescription = document.createElement("span");
+    const inpuDescription = document.createElement("textarea");
+    const labelPriority = document.createElement("label");
+    const spanPriority = document.createElement("span");
+    const inputPriority = document.createElement("select");
+    const optionPriority1 = document.createElement("option");
+    const optionPriority2 = document.createElement("option");
+    const optionPriority3 = document.createElement("option");
+    const buttonValidationContainer = document.createElement("div");
+    const btnConfirm = document.createElement("button");
+    const btnCancel = document.createElement("button");
+    //addTaskButton.setAttribute("id", "add-task-button");
+    formContainer.setAttribute("id", "form-container");
+    //formContainer.setAttribute("hidden", "true");
+    form.setAttribute("id", "form-task");
+    inputDate.setAttribute("type", "datetime-local");
+    labelDescription.setAttribute("for", "description");
+    inpuDescription.setAttribute("id", "input-description");
+    inpuDescription.setAttribute("name", "description");
+    buttonValidationContainer.setAttribute("id", "button-validation-container");
+    btnConfirm.setAttribute("id", "btn-confirm");
+    btnCancel.setAttribute("id", "btn-cancel");
+    labelTitle.classList.add("label-task");
+    spanTitle.classList.add("span-task");
+    inputTitle.classList.add("input-task");
+    labelDate.classList.add("label-task");
+    spanDate.classList.add("span-task");
+    inputDate.classList.add("input-task");
+    spanDescription.classList.add("span-task");
+    labelPriority.classList.add("label-task");
+    spanPriority.classList.add("span-task");
+    inputPriority.classList.add("input-task");
+    //addTaskButton.textContent = "Add Task";
+    ////default input
+    inputTitle.value = title;
+    inputDate.value = date;
+    inpuDescription.value = description;
+    inputPriority.value = "Medium";
+    ///default input
+    spanTitle.textContent = "name";
+    spanDate.textContent = "Due Date";
+    spanDescription.textContent = "Description";
+    spanPriority.textContent = "Priority";
+    optionPriority1.textContent = "High";
+    optionPriority2.textContent = "Medium";
+    optionPriority3.textContent = "Low";
+    btnConfirm.textContent = "Confirm";
+    btnCancel.textContent = "Cancel";
+    //tasksContainer.appendChild(addTaskButton);
+    tasksContainer.appendChild(formContainer);
+    formContainer.appendChild(form);
+    form.appendChild(labelTitle);
+    labelTitle.appendChild(spanTitle);
+    labelTitle.appendChild(inputTitle);
+    form.appendChild(labelDate);
+    labelDate.appendChild(spanDate);
+    labelDate.appendChild(inputDate);
+    form.appendChild(labelDescription);
+    labelDescription.appendChild(spanDescription);
+    labelDescription.appendChild(inpuDescription);
+    form.appendChild(labelPriority);
+    labelPriority.appendChild(spanPriority);
+    labelPriority.appendChild(inputPriority);
+    inputPriority.appendChild(optionPriority1);
+    inputPriority.appendChild(optionPriority2);
+    inputPriority.appendChild(optionPriority3);
+    formContainer.appendChild(buttonValidationContainer);
+    buttonValidationContainer.appendChild(btnConfirm);
+    buttonValidationContainer.appendChild(btnCancel);
+    //addTaskButton.addEventListener("click", () => {
+    //    formContainer.toggleAttribute("hidden")
+    //})
+    btnCancel.addEventListener("click", () => {
+        formContainer.toggleAttribute("hidden");
+    })
+    btnConfirm.addEventListener("click", () => {
+        taskObject.reeditTask(inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value);
+        formContainer.setAttribute("hidden", "true");
+        button1.dispatchEvent(newEvent)
     })
 }
 export default SideBar;
