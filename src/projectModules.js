@@ -15,12 +15,11 @@ export const createProject = (nameProject) => class {
         //this.getPrivateTitle = getPrivateTitle.bind(this)
     }
 
-    reeditTask(title, description, dueDate, priority, complete) {
+    reeditTask(title, description, dueDate, priority) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.complete = complete
     }
 
     getPrivateTitle() {
@@ -32,5 +31,6 @@ export const createProject = (nameProject) => class {
     }
 }
 
+export const deleteProject = (name) => allProject.splice(allProject.findIndex(el => el.name === name))
 export const addProjectToAllProject = (project) => allProject.push(project);
 export default allProject

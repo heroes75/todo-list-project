@@ -1,6 +1,6 @@
 
 //import { el } from "date-fns/locale";
-import allProject, {addProjectToAllProject, createProject} from "./projectModules";
+import allProject, {addProjectToAllProject, createProject, deleteProject} from "./projectModules";
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, filterTaskByComplete, deleteTask} from "./taskModule.js";
 
 
@@ -83,14 +83,14 @@ export const SideBar = (() => {
     select.appendChild(option4);
     content.appendChild(tasksContainer);
     button1.addEventListener("click", () => {
-        select.value = "Select";
-        displayTaskToDOM(allTask, tasksContainer);
+        option1.setAttribute("selected", true);
+        displayTaskToDOM(allTask, tasksContainer, button1.id);
         arrayToSort = [...allTask];
     });
 
     button2.addEventListener("click", () => {
-        select.value = "Select";
-        displayTaskToDOM(filterTaskByComplete(allTask), tasksContainer);
+        option1.setAttribute("selected", true);
+        displayTaskToDOM(filterTaskByComplete(allTask), tasksContainer, button2.id);
         arrayToSort = [...filterTaskByComplete(allTask)];
         console.log(filterTaskByComplete(allTask))
     });
@@ -129,22 +129,37 @@ const displayProjectToDOM = ((ul) => {
         //if(arrayButtonProject.some(ele => ele.textContent === (new el().getPrivateTitle()))) return;
         const li = document.createElement("li");
         const button = document.createElement("button");
+        const btnDeleteProject = document.createElement("button");
+        const privateTitle = new el().getPrivateTitle();
         button.classList.add("nav-bar-button");
-        button.setAttribute("id", new el().getPrivateTitle());
+        button.setAttribute("id", privateTitle);
+        btnDeleteProject.setAttribute("id", "btn-delete-project");
         li.classList.add("side-bar-li");
-        button.textContent = new el().getPrivateTitle();
-        button.dataset.name = new el().getPrivateTitle();
+        btnDeleteProject.textContent = "X";
+        button.textContent = privateTitle;
+        button.dataset.name = privateTitle;
         ////////////////////
         button.addEventListener("click", (e) => {
             e.preventDefault();
             //select.value = "Select";
-            console.log("in array boutton", e.target.textContent);
-            displayTaskToDOM(filterTaskByProject(e.target.textContent), tasksContainer);
+            //console.log("in array boutton", e.target.textContent);
+            displayTaskToDOM(filterTaskByProject(e.target.textContent), tasksContainer, button.id);
             addTAskToDOM(e.target.textContent);
             arrayToSort = [...filterTaskByProject(e.target.textContent)];
         })
         ///////////////////
+        btnDeleteProject.addEventListener("click", (e) => {
+            for (const element of allTask) {
+                console.log("2l2m2nr", element.getPrivateTitle())
+                if(element.getPrivateTitle() === privateTitle) {
+                    allTask.splice(allTask.indexOf(element), 1);
+                    //console.log(allTask.splice(allTask.indexOf(element), 1))
+                }
+            }
+            deleteProject(privateTitle)
+        })
         li.appendChild(button);
+        li.appendChild(btnDeleteProject);
         ul.appendChild(li);
         console.log("in displayProjectToDOM", arrayButtonProject);
     })
@@ -220,9 +235,10 @@ const addProjectToDOM = (ul) => {
 }
 
 //inbox function
-const displayTaskToDOM = (givenArray, container) => {
+const displayTaskToDOM = (givenArray, container, folderID = "") => {
     container.textContent ="";
     givenArray.forEach(el => {
+        let newEvent = new Event("click");
         const taskContainer = document.createElement("div");
         const task = document.createElement("div");
         const checkbox = document.createElement("input");
@@ -232,6 +248,7 @@ const displayTaskToDOM = (givenArray, container) => {
         taskContainer.setAttribute("id", "task-container");
         editButton.setAttribute("id", "edit-button");
         deleteButton.setAttribute("id", "delete-button");
+        deleteButton.dataset.name = el.id
         task.classList.add("task");
         checkbox.setAttribute("type", "checkbox");
         taskTitle.innerHTML = el.title;
@@ -245,8 +262,14 @@ const displayTaskToDOM = (givenArray, container) => {
         task.appendChild(deleteButton);
         editButton.addEventListener("click", (e) => {
             e.preventDefault()
-            reditTask(el, el.title, el.description, el.dueDate, el.priority)
-        })
+            reditTask(el, el.title, el.description, el.dueDate, el.priority, folderID);
+            //document.getElementById(folderID).dispatchEvent(newEvent)
+        });
+
+        deleteButton.addEventListener("click", (e) => {
+            deleteTask(e.target.dataset.name, allTask);
+            document.getElementById(folderID).dispatchEvent(newEvent)
+        });
     });
 }
 
@@ -349,8 +372,9 @@ const addTAskToDOM = (nameProject) => {
     })
 }
 
-const reditTask = (taskObject, title = "", description = "", date = "", priority = "") => {
-    console.log(taskObject)
+const reditTask = (taskObject, title = "", description = "", date = "", priority = "", folderID) => {
+    console.log(taskObject);
+    console.log("priority parameter", priority);
     let newEvent = new Event("click");
     const formContainer = document.createElement("div");
     const form = document.createElement("form");
@@ -394,21 +418,31 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     spanPriority.classList.add("span-task");
     inputPriority.classList.add("input-task");
     //addTaskButton.textContent = "Add Task";
-    ////default input
-    inputTitle.value = title;
-    inputDate.value = date;
-    inpuDescription.value = description;
-    inputPriority.value = "Medium";
-    ///default input
+    
     spanTitle.textContent = "name";
     spanDate.textContent = "Due Date";
     spanDescription.textContent = "Description";
     spanPriority.textContent = "Priority";
     optionPriority1.textContent = "High";
+    optionPriority1.value = "High";
     optionPriority2.textContent = "Medium";
+    optionPriority2.value = "Medium";
     optionPriority3.textContent = "Low";
+    optionPriority3.value = "Low";
     btnConfirm.textContent = "Confirm";
     btnCancel.textContent = "Cancel";
+    ////default input
+    inputTitle.value = title;
+    inputDate.value = date;
+    inpuDescription.value = description;
+    if (optionPriority1.value === priority) {
+        optionPriority1.setAttribute("selected", true)
+    } else if (optionPriority2.value === priority) {
+        optionPriority2.setAttribute("selected", true)
+    } else if (optionPriority3.value === priority) {
+        optionPriority3.setAttribute("selected", true)
+    }
+    ////default input
     //tasksContainer.appendChild(addTaskButton);
     tasksContainer.appendChild(formContainer);
     formContainer.appendChild(form);
@@ -439,7 +473,8 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     btnConfirm.addEventListener("click", () => {
         taskObject.reeditTask(inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value);
         formContainer.setAttribute("hidden", "true");
-        button1.dispatchEvent(newEvent)
+        console.log(inputPriority.value)
+        document.getElementById(folderID).dispatchEvent(newEvent)
     })
 }
 export default SideBar;

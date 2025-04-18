@@ -40,8 +40,8 @@ export const filterTaskByComplete = () => {
   const selectedProjects = allTask.filter(el => el.complete === true);
   return selectedProjects
 }
-export const deleteTask = (id, taskArray) => {
-  taskArray.splice(id, 1);
+export const deleteTask = (ids, taskArray) => {
+  taskArray.splice(taskArray.findIndex(el => el.id === ids), 1);
   return taskArray
 }
 export default allTask
