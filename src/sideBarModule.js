@@ -95,7 +95,9 @@ export const SideBar = (() => {
         console.log(filterTaskByComplete(allTask))
     });
 
-    
+    button3.addEventListener("click", () => {
+        displayProjectToDOM(ul2);
+    })
 
     
     select.addEventListener("change", (e) => {
@@ -125,6 +127,7 @@ export const SideBar = (() => {
 
 const displayProjectToDOM = ((ul) => {
     ul.textContent = "";
+    let newEvent = new Event("click");
     allProject.forEach(el => {
         //if(arrayButtonProject.some(ele => ele.textContent === (new el().getPrivateTitle()))) return;
         const li = document.createElement("li");
@@ -149,22 +152,25 @@ const displayProjectToDOM = ((ul) => {
         })
         ///////////////////
         btnDeleteProject.addEventListener("click", (e) => {
-            for (const element of allTask) {
-                console.log("2l2m2nr", element.getPrivateTitle())
-                if(element.getPrivateTitle() === privateTitle) {
-                    allTask.splice(allTask.indexOf(element), 1);
-                    //console.log(allTask.splice(allTask.indexOf(element), 1))
+            for (let i = 0; i < allTask.length; i++) {
+                console.log("2l2m2nr", allTask[i].getPrivateTitle());
+                if(allTask[i].getPrivateTitle() === privateTitle) {
+                    allTask.splice(i, 1);
+                    i--;
                 }
             }
-            deleteProject(privateTitle)
+            deleteProject(privateTitle);
+            localStorage.setItem("allProject", JSON.stringify(allProject));
+            button3.dispatchEvent(newEvent);
+            button1.dispatchEvent(newEvent)
+            console.log(allProject)
         })
         li.appendChild(button);
         li.appendChild(btnDeleteProject);
         ul.appendChild(li);
         console.log("in displayProjectToDOM", arrayButtonProject);
     })
-    addProjectToDOM(ul)
-
+    addProjectToDOM(ul);
 })
 
 
@@ -211,6 +217,7 @@ const addProjectToDOM = (ul) => {
     dialog.addEventListener("close", () => {
         if(confirmButton.value !== "") {
             addProjectToAllProject(createProject(confirmButton.value));
+            localStorage.setItem("allProject", JSON.stringify(allProject));
             displayProjectToDOM(ul)
         }
     })
@@ -242,16 +249,18 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         const taskContainer = document.createElement("div");
         const task = document.createElement("div");
         const checkbox = document.createElement("input");
-        const taskTitle = document.createElement("span");
+        const taskTitle = document.createElement("label");
         const editButton = document.createElement("buttton");
         const deleteButton = document.createElement("button");
         taskContainer.setAttribute("id", "task-container");
         editButton.setAttribute("id", "edit-button");
         deleteButton.setAttribute("id", "delete-button");
-        deleteButton.dataset.name = el.id
+        deleteButton.dataset.name = el.id;
         task.classList.add("task");
         checkbox.setAttribute("type", "checkbox");
-        taskTitle.innerHTML = el.title;
+        checkbox.setAttribute("id", "check-task");
+        taskTitle.setAttribute("for", "check-task");
+        taskTitle.innerHTML = el.complete === true ? `<s>${el.title}</s>`: el.title;
         editButton.innerHTML = "edit";
         deleteButton.innerHTML = "delete";
         container.appendChild(taskContainer);
@@ -261,15 +270,25 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         task.appendChild(editButton);
         task.appendChild(deleteButton);
         editButton.addEventListener("click", (e) => {
-            e.preventDefault()
+            e.preventDefault();
             reditTask(el, el.title, el.description, el.dueDate, el.priority, folderID);
             //document.getElementById(folderID).dispatchEvent(newEvent)
         });
 
         deleteButton.addEventListener("click", (e) => {
             deleteTask(e.target.dataset.name, allTask);
-            document.getElementById(folderID).dispatchEvent(newEvent)
+            // add task to DOM
+            localStorage.setItem("allTask", JSON.stringify(allTask));
+            document.getElementById(folderID).dispatchEvent(newEvent);
         });
+        if(el.complete === true) {
+            checkbox.setAttribute("checked", true);
+        }
+        checkbox.addEventListener("click", (e) => {
+            el.ToggleComplete();
+            e.target.toggleAttribute("checked");
+            document.getElementById(folderID).dispatchEvent(newEvent);
+        })
     });
 }
 
@@ -366,9 +385,9 @@ const addTAskToDOM = (nameProject) => {
     })
     btnConfirm.addEventListener("click", () => {
         addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
+        localStorage.setItem("allTask", JSON.stringify(allTask));
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
         document.getElementById(nameProject).dispatchEvent(newEvent);
-        console.log(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false))
     })
 }
 

@@ -30,3 +30,7 @@ button {
 #inbox {
     width: 100%;
 }
+
+#check-task:checked {
+    color: red;
+}
