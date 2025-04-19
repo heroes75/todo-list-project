@@ -2,7 +2,7 @@ import allProject from "./projectModules";
 import { compareAsc } from "date-fns";
 
 const priorityArray = ["High", "Medium", "Low"]
-const allTask = [];
+let allTask = [];
  export const addTaskToAllTask = (all) => {
     //const name = new all
     allTask.push(all)
@@ -32,6 +32,7 @@ export const sortTaskByPriority = (arrayOfTask) => {
 }
 
 export const filterTaskByProject = (projectName) => {
+  console.log("qweqweqe", allTask)
   const selectedProjects = allTask.filter(el => el.getPrivateTitle() === projectName);
   return selectedProjects
 }

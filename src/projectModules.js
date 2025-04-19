@@ -2,7 +2,7 @@
 
 
 
-const allProject = [];
+let allProject = [];
 export const createProject = (nameProject) => class {
     //#titleProject = nameProject
     constructor(title, description, dueDate, priority, complete) {

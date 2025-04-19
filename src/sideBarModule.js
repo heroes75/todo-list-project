@@ -153,17 +153,15 @@ const displayProjectToDOM = ((ul) => {
         ///////////////////
         btnDeleteProject.addEventListener("click", (e) => {
             for (let i = 0; i < allTask.length; i++) {
-                console.log("2l2m2nr", allTask[i].getPrivateTitle());
                 if(allTask[i].getPrivateTitle() === privateTitle) {
                     allTask.splice(i, 1);
                     i--;
                 }
             }
             deleteProject(privateTitle);
-            localStorage.setItem("allProject", JSON.stringify(allProject));
+            addProjectToLocalStorage();
             button3.dispatchEvent(newEvent);
             button1.dispatchEvent(newEvent)
-            console.log(allProject)
         })
         li.appendChild(button);
         li.appendChild(btnDeleteProject);
@@ -217,7 +215,7 @@ const addProjectToDOM = (ul) => {
     dialog.addEventListener("close", () => {
         if(confirmButton.value !== "") {
             addProjectToAllProject(createProject(confirmButton.value));
-            localStorage.setItem("allProject", JSON.stringify(allProject));
+            addProjectToLocalStorage();
             displayProjectToDOM(ul)
         }
     })
@@ -278,7 +276,7 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         deleteButton.addEventListener("click", (e) => {
             deleteTask(e.target.dataset.name, allTask);
             // add task to DOM
-            localStorage.setItem("allTask", JSON.stringify(allTask));
+            addTaskToLocalStorage();
             document.getElementById(folderID).dispatchEvent(newEvent);
         });
         if(el.complete === true) {
@@ -385,7 +383,7 @@ const addTAskToDOM = (nameProject) => {
     })
     btnConfirm.addEventListener("click", () => {
         addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
-        localStorage.setItem("allTask", JSON.stringify(allTask));
+        addTaskToLocalStorage();
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
         document.getElementById(nameProject).dispatchEvent(newEvent);
     })
@@ -488,12 +486,37 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     //})
     btnCancel.addEventListener("click", () => {
         formContainer.toggleAttribute("hidden");
-    })
+    });
+
     btnConfirm.addEventListener("click", () => {
         taskObject.reeditTask(inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value);
         formContainer.setAttribute("hidden", "true");
         console.log(inputPriority.value)
         document.getElementById(folderID).dispatchEvent(newEvent)
-    })
+    });
+}
+
+const addProjectToLocalStorage = () => {
+    //let newAllProject = [...allProject];
+    let newAllProject = allProject.map(el => {
+        return el = el.toString();
+    });
+    console.log("sting newAllProject", allProject === newAllProject)
+    localStorage.setItem("allProject", JSON.stringify(newAllProject))
+}
+
+const addTaskToLocalStorage = () => {
+    //let newAllTask = [...allTask];
+    let newAllTask = allTask.map(el => {
+        console.log(el.getPrivateTitle.toString())
+        console.log(el.ToggleComplete.toString())
+
+        el.getPrivateTitle = el.getPrivateTitle.toString();
+        el.reeditTask = el.reeditTask.toString();
+        el.ToggleComplete = el.ToggleComplete.toString();
+        return el
+    });
+    console.log("sting newAllTask", allTask === newAllTask)
+    localStorage.setItem("allTask", JSON.stringify(newAllTask))
 }
 export default SideBar;

@@ -12,15 +12,24 @@ const allProjectInLocal = localStorage.getItem("allProject");
   const allTaskInLocal = localStorage.getItem("allTask");
 
 if (allProjectInLocal) {
-  allProject = JSON.parse(allProjectInLocal)
-  // You can use userData here...
+  const allProjectToParse = JSON.parse(allProjectInLocal);
+  console.log(allProjectToParse instanceof Object);
+  allProject = [...allProjectToParse.map(el => {
+    return el = eval("(" + el + ")");
+  })]
+  console.log(allProject)
 } else {
   console.log('User data not found in local storage')
 }
 
 if (allTaskInLocal) {
-    allTask = JSON.parse(allTaskInLocal)
-    // You can use userData here...
+    allTaskToParse = JSON.parse(allTaskInLocal);
+    allTask = allTaskToParse.map(el => {
+      el.getPrivateTitle =  eval("(" + el.getPrivateTitle + ")");
+      el.reeditTask =  eval("(" + el.reeditTask + ")");
+      el.ToggleComplete =  eval("(" + el.ToggleComplete + ")");
+      return el
+    })
   } else {
     console.log('User data not found in local storage')
   }
