@@ -22,10 +22,10 @@ if (allProjectInLocal) {
     return el = eval("(" + el + ")");
   }).forEach((el, i) => {
     console.log(i)
-    allProject.unshift(el)
+    addProjectToAllProject(el)
   })
   console.log("new allProject[1]()");
-  console.log("new allProject[1]()", allProject[2]);
+  console.log("new allProject[1]()", allProject);
 } else {
   console.log('User data not found in local storage')
 }
