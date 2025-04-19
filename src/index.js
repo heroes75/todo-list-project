@@ -8,16 +8,24 @@ import Inbox from "./inboxModule.js";
 
 
 
-const allProjectInLocal = localStorage.getItem("allProject");
-  const allTaskInLocal = localStorage.getItem("allTask");
+const allProjectInLocal = localStorage.getItem("allProjectInLocalStorage");
+  const allTaskInLocal = localStorage.getItem("allTaskInLocalStorage");
+
+
 
 if (allProjectInLocal) {
   const allProjectToParse = JSON.parse(allProjectInLocal);
-  console.log(allProjectToParse instanceof Object);
-  allProject = [...allProjectToParse.map(el => {
+  console.log("llProjectToParse instanceof Object", allProjectToParse instanceof Object);
+  console.log("allProject.length > 0", allProject.length);
+  allProjectToParse.map(el => {
+    console.log("(" + el + ")");
     return el = eval("(" + el + ")");
-  })]
-  console.log(allProject)
+  }).forEach((el, i) => {
+    console.log(i)
+    allProject.unshift(el)
+  })
+  console.log("new allProject[1]()");
+  console.log("new allProject[1]()", allProject[2]);
 } else {
   console.log('User data not found in local storage')
 }

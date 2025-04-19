@@ -140,6 +140,7 @@ const displayProjectToDOM = ((ul) => {
         li.classList.add("side-bar-li");
         btnDeleteProject.textContent = "X";
         button.textContent = privateTitle;
+        console.log(privateTitle);
         button.dataset.name = privateTitle;
         ////////////////////
         button.addEventListener("click", (e) => {
@@ -160,8 +161,9 @@ const displayProjectToDOM = ((ul) => {
             }
             deleteProject(privateTitle);
             addProjectToLocalStorage();
+            console.log("true allProject", allProject)
             button3.dispatchEvent(newEvent);
-            button1.dispatchEvent(newEvent)
+            button1.dispatchEvent(newEvent);
         })
         li.appendChild(button);
         li.appendChild(btnDeleteProject);
@@ -276,8 +278,8 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         deleteButton.addEventListener("click", (e) => {
             deleteTask(e.target.dataset.name, allTask);
             // add task to DOM
-            addTaskToLocalStorage();
             document.getElementById(folderID).dispatchEvent(newEvent);
+            addTaskToLocalStorage();
         });
         if(el.complete === true) {
             checkbox.setAttribute("checked", true);
@@ -383,9 +385,9 @@ const addTAskToDOM = (nameProject) => {
     })
     btnConfirm.addEventListener("click", () => {
         addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
-        addTaskToLocalStorage();
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
         document.getElementById(nameProject).dispatchEvent(newEvent);
+        addTaskToLocalStorage();
     })
 }
 
@@ -501,8 +503,11 @@ const addProjectToLocalStorage = () => {
     let newAllProject = allProject.map(el => {
         return el = el.toString();
     });
-    console.log("sting newAllProject", allProject === newAllProject)
-    localStorage.setItem("allProject", JSON.stringify(newAllProject))
+    console.log("string newAllProject", allProject === newAllProject);
+    localStorage.setItem("allProjectInLocalStorage", JSON.stringify(newAllProject));
+    allProject.forEach(el => {
+        localStorage.setItem(`${new el().getPrivateTitle()}`, new el().getPrivateTitle())
+    });
 }
 
 const addTaskToLocalStorage = () => {
@@ -517,6 +522,6 @@ const addTaskToLocalStorage = () => {
         return el
     });
     console.log("sting newAllTask", allTask === newAllTask)
-    localStorage.setItem("allTask", JSON.stringify(newAllTask))
+    localStorage.setItem("allTaskInLocalStorage", JSON.stringify(newAllTask))
 }
 export default SideBar;
