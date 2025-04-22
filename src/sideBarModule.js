@@ -1,11 +1,7 @@
-
-//import { el } from "date-fns/locale";
 import allProject, {addProjectToAllProject, createProject, deleteProject} from "./projectModules";
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, filterTaskByComplete, deleteTask} from "./taskModule.js";
 
 
-//export const inputTest = document.createElement("input");
-//inputTest.value = 2
 export let arrayInbox = [];
 export const button1 = document.createElement("button");
 export const button2 = document.createElement("button");
@@ -118,7 +114,7 @@ export const SideBar = (() => {
     });
 
     
-    displayTaskToDOM(arrayInbox, tasksContainer);
+    displayTaskToDOM(allTask, tasksContainer);
 
     //inbox instruction end
 
@@ -129,7 +125,6 @@ const displayProjectToDOM = ((ul) => {
     ul.textContent = "";
     let newEvent = new Event("click");
     allProject.forEach(el => {
-        //if(arrayButtonProject.some(ele => ele.textContent === (new el().getPrivateTitle()))) return;
         const li = document.createElement("li");
         const button = document.createElement("button");
         const btnDeleteProject = document.createElement("button");
@@ -175,7 +170,6 @@ const displayProjectToDOM = ((ul) => {
 })
 
 
-//const buttonAddProject = document.createElement("button");
 const addProjectToDOM = (ul) => {
     const li = document.createElement("li");
     const dialog = document.createElement("dialog");
@@ -208,8 +202,6 @@ const addProjectToDOM = (ul) => {
     cancelButton.textContent = "Cancel";
     buttonAddProject.addEventListener("click", e => {
         e.preventDefault();
-        //inputTest.value = Math.random();
-        //console.log(inputTest.value)
         dialog.showModal();
     });
     input.addEventListener("change", () => {
@@ -289,6 +281,7 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
             el.ToggleComplete();
             e.target.toggleAttribute("checked");
             document.getElementById(folderID).dispatchEvent(newEvent);
+            addTaskToLocalStorage()
         })
     });
 }
@@ -416,9 +409,7 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     const buttonValidationContainer = document.createElement("div");
     const btnConfirm = document.createElement("button");
     const btnCancel = document.createElement("button");
-    //addTaskButton.setAttribute("id", "add-task-button");
     formContainer.setAttribute("id", "form-container");
-    //formContainer.setAttribute("hidden", "true");
     form.setAttribute("id", "form-task");
     inputDate.setAttribute("type", "datetime-local");
     labelDescription.setAttribute("for", "description");
@@ -436,9 +427,7 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     spanDescription.classList.add("span-task");
     labelPriority.classList.add("label-task");
     spanPriority.classList.add("span-task");
-    inputPriority.classList.add("input-task");
-    //addTaskButton.textContent = "Add Task";
-    
+    inputPriority.classList.add("input-task");    
     spanTitle.textContent = "name";
     spanDate.textContent = "Due Date";
     spanDescription.textContent = "Description";
@@ -484,9 +473,6 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     formContainer.appendChild(buttonValidationContainer);
     buttonValidationContainer.appendChild(btnConfirm);
     buttonValidationContainer.appendChild(btnCancel);
-    //addTaskButton.addEventListener("click", () => {
-    //    formContainer.toggleAttribute("hidden")
-    //})
     btnCancel.addEventListener("click", () => {
         formContainer.toggleAttribute("hidden");
     });
@@ -494,8 +480,9 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     btnConfirm.addEventListener("click", () => {
         taskObject.reeditTask(inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value);
         formContainer.setAttribute("hidden", "true");
-        console.log(inputPriority.value)
-        document.getElementById(folderID).dispatchEvent(newEvent)
+        console.log(inputPriority.value);
+        document.getElementById(folderID).dispatchEvent(newEvent);
+        addTaskToLocalStorage()
     });
 }
 
