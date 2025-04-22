@@ -161,6 +161,7 @@ const displayProjectToDOM = ((ul) => {
             }
             deleteProject(privateTitle);
             addProjectToLocalStorage();
+            addTaskToLocalStorage();
             console.log("true allProject", allProject)
             button3.dispatchEvent(newEvent);
             button1.dispatchEvent(newEvent);
@@ -500,28 +501,36 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
 
 const addProjectToLocalStorage = () => {
     //let newAllProject = [...allProject];
+    const arrayProjectName = []
     let newAllProject = allProject.map(el => {
         return el = el.toString();
     });
     console.log("string newAllProject", allProject === newAllProject);
     localStorage.setItem("allProjectInLocalStorage", JSON.stringify(newAllProject));
     allProject.forEach(el => {
-        localStorage.setItem(`${new el().getPrivateTitle()}`, new el().getPrivateTitle())
+        arrayProjectName.push(new el().getPrivateTitle())
+        localStorage.setItem("allProjectName", JSON.stringify(allProject.map(el => new el().getPrivateTitle())))
     });
 }
 
 const addTaskToLocalStorage = () => {
     //let newAllTask = [...allTask];
+    let taskByProjectObject = {};
     let newAllTask = allTask.map(el => {
         console.log(el.getPrivateTitle.toString())
         console.log(el.ToggleComplete.toString())
 
-        el.getPrivateTitle = el.getPrivateTitle.toString();
-        el.reeditTask = el.reeditTask.toString();
-        el.ToggleComplete = el.ToggleComplete.toString();
+        //el.getPrivateTitle = el.getPrivateTitle.toString();
+        //el.reeditTask = el.reeditTask.toString();
+        //el.ToggleComplete = el.ToggleComplete.toString();
         return el
     });
+    allTask.forEach(el => {
+        console.log(el)
+        taskByProjectObject[el.getPrivateTitle()] = filterTaskByProject(el.getPrivateTitle())
+    })
+    console.log(taskByProjectObject)
     console.log("sting newAllTask", allTask === newAllTask)
-    localStorage.setItem("allTaskInLocalStorage", JSON.stringify(newAllTask))
+    localStorage.setItem("allTaskInLocalStorage", JSON.stringify(newAllTask));
 }
 export default SideBar;

@@ -9,47 +9,52 @@ import Inbox from "./inboxModule.js";
 
 
 const allProjectInLocal = localStorage.getItem("allProjectInLocalStorage");
-  const allTaskInLocal = localStorage.getItem("allTaskInLocalStorage");
+const allTaskInLocal = localStorage.getItem("allTaskInLocalStorage");
+const allProjectNameInLocal = localStorage.getItem("allProjectName");
 
 
 
 if (allProjectInLocal) {
   const allProjectToParse = JSON.parse(allProjectInLocal);
+  const allProjectNameToParse = JSON.parse(allProjectNameInLocal);
+  console.log("allProjectNameToParse", allProjectNameToParse)
   console.log("llProjectToParse instanceof Object", allProjectToParse instanceof Object);
   console.log("allProject.length > 0", allProject.length);
-  allProjectToParse.map(el => {
-    console.log("(" + el + ")");
-    return el = eval("(" + el + ")");
-  }).forEach((el, i) => {
-    console.log(i)
-    addProjectToAllProject(el)
+  allProjectNameToParse.forEach(el => {
+    addProjectToAllProject(createProject(el));
+    console.log(allProject)
   })
   console.log("new allProject[1]()");
   console.log("new allProject[1]()", allProject);
 } else {
-  console.log('User data not found in local storage')
-}
-
-if (allTaskInLocal) {
-    allTaskToParse = JSON.parse(allTaskInLocal);
-    allTask = allTaskToParse.map(el => {
-      el.getPrivateTitle =  eval("(" + el.getPrivateTitle + ")");
-      el.reeditTask =  eval("(" + el.reeditTask + ")");
-      el.ToggleComplete =  eval("(" + el.ToggleComplete + ")");
-      return el
-    })
-  } else {
-    console.log('User data not found in local storage')
-  }
-
   addProjectToAllProject(createProject("qwerty1"));
   addProjectToAllProject(createProject("qwerty"));
   addProjectToAllProject(createProject("qwerty3"));
+}
+
+if (allTaskInLocal) {
+    const allTaskToParse = JSON.parse(allTaskInLocal);
+    const allProjectNameToParse = JSON.parse(allProjectNameInLocal);
+    allTaskToParse.forEach(el => {
+      console.log(el.privateTitle)
+      addTaskToAllTask(createTask(el.privateTitle, el.title, el.description, el.dueDate, el.priority, el.complete))
+    })
+  } else {
+    console.log('User data not found in local storage');
+    addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3, 3, 33), "High", false));
+    addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5, 9, 33), "High", false));
+    addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3, 5, 33), "Low", false));
+    addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29, 9, 33), "Medium", true));
+  }
+
+  //addProjectToAllProject(createProject("qwerty1"));
+  //addProjectToAllProject(createProject("qwerty"));
+  //addProjectToAllProject(createProject("qwerty3"));
   
-  addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3, 3, 33), "High", false));
-  addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5, 9, 33), "High", false));
-  addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3, 5, 33), "Low", false));
-  addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29, 9, 33), "Medium", true));
+  //addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3, 3, 33), "High", false));
+  //addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5, 9, 33), "High", false));
+  //addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3, 5, 33), "Low", false));
+  //addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29, 9, 33), "Medium", true));
 
 
   

@@ -5,7 +5,7 @@
 let allProject = [];
 export function createProject (nameProject)  {
     return class {
-    #privateTitle = nameProject;
+    privateTitle = nameProject;
     constructor(title, description, dueDate, priority, complete) {
         this.title = title;
         this.description = description;
@@ -24,12 +24,8 @@ export function createProject (nameProject)  {
     }
 
     getPrivateTitle() {
-        const privateTitle = this.#privateTitle
-        return this.#privateTitle;
-    }
-
-    setPrivateTitle(name) {
-        this.#privateTitle = name
+        //const privateTitle = this.#privateTitle
+        return this.privateTitle;
     }
 
     ToggleComplete() {
@@ -37,6 +33,9 @@ export function createProject (nameProject)  {
     }
 }
 }
-export const deleteProject = (name) => allProject.splice(allProject.findIndex(el => el.name === name))
+export const deleteProject = (names) => {
+    console.log(allProject.findIndex(el => el.name === names))
+    allProject.splice(allProject.findIndex(el => new el().getPrivateTitle() === names), 1)
+}
 export const addProjectToAllProject = (project) => allProject.push(project);
 export default allProject
