@@ -22,6 +22,7 @@ export const SideBar = (() => {
     //inbox declaration start
     //let arrayToSort = [];
     const inbox = document.createElement("div");
+    const inboxText = document.createElement("p");
     const content = document.createElement("div");
     const selectContainer = document.createElement("div");
     const select = document.createElement("select");
@@ -45,11 +46,8 @@ export const SideBar = (() => {
     button2.classList.add("nav-bar-button");
     button3.classList.add("nav-bar-button");
     button1.textContent = "ALL";
-    button2.textContent = "Complete TASK";
+    button2.textContent = "Completed TASK";
     button3.textContent = "PROJECT";
-    //button1.addEventListener("click", () => {
-    //    displayTaskToDOM([...allTask])
-    //})
     document.querySelector("#box").appendChild(sideBar);
     sideBar.appendChild(ul1);
     ul1.appendChild(li1);
@@ -63,13 +61,16 @@ export const SideBar = (() => {
 
     //inbox instruction start
     inbox.setAttribute("id", "inbox");
+    inboxText.setAttribute("id", "inbox-text");
     content.setAttribute("id", "content");
-    inbox.textContent = "INBOX";
+    selectContainer.setAttribute("id", "select-container");
+    inboxText.textContent = "INBOX";
     option1.textContent = "Select";
     option2.textContent = "Sort by Title";
     option3.textContent = "Sort by Due Date";
     option4.textContent = "Sort by Priority";
     box.appendChild(inbox);
+    inbox.appendChild(inboxText);
     inbox.appendChild(content);
     content.appendChild(selectContainer);
     selectContainer.appendChild(select);
@@ -97,24 +98,37 @@ export const SideBar = (() => {
 
     
     select.addEventListener("change", (e) => {
+        let folderID = "";
+        const setFolderID = (array) => {
+            if(array.every(el => el.privateTitle === array[0].privateTitle)) {
+                return folderID = array[0].privateTitle
+            }else if(array.every(el => el.complete === true)) {
+                return folderID = button2.id
+            }else {
+                return folderID = button1.id
+            }
+        }
         switch (e.target.value) {
             case "Sort by Title":
-                displayTaskToDOM(sortTaskByTittle(arrayToSort), tasksContainer);
+                const folder1 = setFolderID(sortTaskByTittle(arrayToSort));
+                displayTaskToDOM(sortTaskByTittle(arrayToSort), tasksContainer, folder1);
                 break;
             case "Sort by Due Date":
-                displayTaskToDOM(sortTaskByDuDate(arrayToSort), tasksContainer);
+                const folder2 = setFolderID(sortTaskByDuDate(arrayToSort));
+                displayTaskToDOM(sortTaskByDuDate(arrayToSort), tasksContainer, folder2);
                 break;
             case "Sort by Priority":
-                displayTaskToDOM(sortTaskByPriority(arrayToSort), tasksContainer);
+                const folder3 = setFolderID(sortTaskByDuDate(arrayToSort));
+                displayTaskToDOM(sortTaskByPriority(arrayToSort), tasksContainer, folder3);
                 break;
             default:
-                displayTaskToDOM(arrayToSort, tasksContainer);
+                displayTaskToDOM(arrayToSort, tasksContainer, button1.id);
                 break;
         }
     });
 
     
-    displayTaskToDOM(allTask, tasksContainer);
+    displayTaskToDOM(allTask, tasksContainer, button1.id);
 
     //inbox instruction end
 
@@ -188,13 +202,19 @@ const addProjectToDOM = (ul) => {
     li.classList.add("side-bar-li");
     buttonAddProject.setAttribute("id", "showModal");
     form.setAttribute("method", "dialog");
+    form.setAttribute("id", "form-add-project");
     newProject.setAttribute("id", "new-project");
     label.setAttribute("id", "label");
     input.setAttribute("id", "input");
+    input.setAttribute("type", "text");
+    //input.setAttribute("required", "required");
     buttonContainer.setAttribute("id", "button-container");
     cancelButton.setAttribute("id", "cancel-button");
     cancelButton.setAttribute("value", "cancel");
+    cancelButton.setAttribute("formmethod", "dialog");
     confirmButton.setAttribute("id", "confirm-button");
+    confirmButton.setAttribute("value", "");
+    confirmButton.setAttribute("type", "submit");
     p.textContent = "New Project";
     buttonAddProject.textContent = "ADD PROJECT";
     span.textContent = "name";
@@ -207,17 +227,24 @@ const addProjectToDOM = (ul) => {
     input.addEventListener("change", () => {
         confirmButton.value = input.value;
     });
-    dialog.addEventListener("close", () => {
+    dialog.addEventListener("close", (e) => {
         if(confirmButton.value !== "") {
             addProjectToAllProject(createProject(confirmButton.value));
             addProjectToLocalStorage();
             displayProjectToDOM(ul)
         }
+    });
+    cancelButton.addEventListener("click", (e) => {
+        input.value = "";
+        dialog.close()
     })
     confirmButton.addEventListener("click", (e) => {
+        if(input.value === "") {
+            alert("must fill out")
+        }
+        dialog.close(input.value);
         e.preventDefault();
-        dialog.close(input.value)
-    })
+    });
     ul.appendChild(li);
     li.appendChild(buttonAddProject);
     li.appendChild(dialog);
@@ -237,17 +264,23 @@ const addProjectToDOM = (ul) => {
 //inbox function
 const displayTaskToDOM = (givenArray, container, folderID = "") => {
     container.textContent ="";
+    container
+    const taskContainer = document.createElement("div");
+    taskContainer.setAttribute("id", "task-container");
+    container.appendChild(taskContainer);
     givenArray.forEach(el => {
         let newEvent = new Event("click");
-        const taskContainer = document.createElement("div");
         const task = document.createElement("div");
+        const checkboxContainer = document.createElement("div");
         const checkbox = document.createElement("input");
         const taskTitle = document.createElement("label");
+        const buttonContainer = document.createElement("div");
         const editButton = document.createElement("buttton");
         const deleteButton = document.createElement("button");
-        taskContainer.setAttribute("id", "task-container");
         editButton.setAttribute("id", "edit-button");
         deleteButton.setAttribute("id", "delete-button");
+        checkboxContainer.setAttribute("id", "checkbox-container");
+        buttonContainer.setAttribute("id", "button-container");
         deleteButton.dataset.name = el.id;
         task.classList.add("task");
         checkbox.setAttribute("type", "checkbox");
@@ -256,21 +289,23 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         taskTitle.innerHTML = el.complete === true ? `<s>${el.title}</s>`: el.title;
         editButton.innerHTML = "edit";
         deleteButton.innerHTML = "delete";
-        container.appendChild(taskContainer);
         taskContainer.appendChild(task);
-        task.appendChild(checkbox);
-        task.appendChild(taskTitle);
-        task.appendChild(editButton);
-        task.appendChild(deleteButton);
+        task.appendChild(checkboxContainer);
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(taskTitle);
+        task.appendChild(buttonContainer);
+        buttonContainer.appendChild(editButton);
+        buttonContainer.appendChild(deleteButton);
         editButton.addEventListener("click", (e) => {
             e.preventDefault();
             reditTask(el, el.title, el.description, el.dueDate, el.priority, folderID);
-            //document.getElementById(folderID).dispatchEvent(newEvent)
         });
 
         deleteButton.addEventListener("click", (e) => {
+            e.preventDefault()
             deleteTask(e.target.dataset.name, allTask);
             // add task to DOM
+            console.log("folderID", folderID)
             document.getElementById(folderID).dispatchEvent(newEvent);
             addTaskToLocalStorage();
         });
@@ -314,9 +349,13 @@ const addTAskToDOM = (nameProject) => {
     formContainer.setAttribute("hidden", "true");
     form.setAttribute("id", "form-task");
     inputDate.setAttribute("type", "datetime-local");
-    labelDescription.setAttribute("for", "description");
+    inputDate.setAttribute("required", "true");
+    labelDescription.setAttribute("for", "input-description");
     inpuDescription.setAttribute("id", "input-description");
+    inpuDescription.setAttribute("required", "true");
     inpuDescription.setAttribute("name", "description");
+    inputTitle.setAttribute("required", "true");
+    inputPriority.setAttribute("required", "true");
     buttonValidationContainer.setAttribute("id", "button-validation-container");
     btnConfirm.setAttribute("id", "btn-confirm");
     btnCancel.setAttribute("id", "btn-cancel");
@@ -373,15 +412,21 @@ const addTAskToDOM = (nameProject) => {
         inpuDescription.value = "";
         inputPriority.value = "High";
     }
-    btnCancel.addEventListener("click", () => {
+    btnCancel.addEventListener("click", (e) => {
+        e.preventDefault()
         resetValue();
         formContainer.toggleAttribute("hidden");
     })
-    btnConfirm.addEventListener("click", () => {
+    btnConfirm.addEventListener("click", (e) => {
+        if(inputTitle.value === "" || inputDate.value === "" || inpuDescription.value === "" || inputPriority.value === "") {
+            alert("all input must fill out");
+            return
+        }
         addTaskToAllTask(createTask(nameProject, inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value, false));
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
         document.getElementById(nameProject).dispatchEvent(newEvent);
         addTaskToLocalStorage();
+        e.preventDefault()
     })
 }
 
@@ -452,7 +497,6 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
         optionPriority3.setAttribute("selected", true)
     }
     ////default input
-    //tasksContainer.appendChild(addTaskButton);
     tasksContainer.appendChild(formContainer);
     formContainer.appendChild(form);
     form.appendChild(labelTitle);
@@ -478,6 +522,10 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     });
 
     btnConfirm.addEventListener("click", () => {
+        if(inputTitle.value === "" || inputDate.value === "" || inpuDescription.value === "" || inputPriority.value === "") {
+            alert("all input must fill out");
+            return
+        }
         taskObject.reeditTask(inputTitle.value, inpuDescription.value, inputDate.value, inputPriority.value);
         formContainer.setAttribute("hidden", "true");
         console.log(inputPriority.value);
@@ -487,7 +535,6 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
 }
 
 const addProjectToLocalStorage = () => {
-    //let newAllProject = [...allProject];
     const arrayProjectName = []
     let newAllProject = allProject.map(el => {
         return el = el.toString();
@@ -501,22 +548,7 @@ const addProjectToLocalStorage = () => {
 }
 
 const addTaskToLocalStorage = () => {
-    //let newAllTask = [...allTask];
-    let taskByProjectObject = {};
-    let newAllTask = allTask.map(el => {
-        console.log(el.getPrivateTitle.toString())
-        console.log(el.ToggleComplete.toString())
-
-        //el.getPrivateTitle = el.getPrivateTitle.toString();
-        //el.reeditTask = el.reeditTask.toString();
-        //el.ToggleComplete = el.ToggleComplete.toString();
-        return el
-    });
-    allTask.forEach(el => {
-        console.log(el)
-        taskByProjectObject[el.getPrivateTitle()] = filterTaskByProject(el.getPrivateTitle())
-    })
-    console.log(taskByProjectObject)
+    let newAllTask = allTask.map(el => el);
     console.log("sting newAllTask", allTask === newAllTask)
     localStorage.setItem("allTaskInLocalStorage", JSON.stringify(newAllTask));
 }

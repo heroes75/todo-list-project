@@ -18,6 +18,51 @@ body {
     align-items: center;
 }
 
+ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#side-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: clamp(250px, 10%, 20%);
+    padding-top: 32px;
+}
+
+#inbox-text {
+    font-size: 32px;
+}
+
+#select-container {
+    text-align: end;
+    margin-right: 13px;
+}
+#task-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0.5rem;
+}
+
+.task {
+    height: 45px;
+    width: 95%;
+    align-self: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem;
+}
+
+#checkbox-container, #button-container {
+    display: flex;
+    gap: 7px;
+}
 #box {
     display: flex;
     flex-basis: 100%;
