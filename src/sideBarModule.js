@@ -12,6 +12,7 @@ let arrayToSort = [];
 
 
 export const SideBar = (() => {
+    let newEvent = new Event("click");
     const sideBar = document.createElement("div");
     const ul1 = document.createElement("ul");
     const li1 = document.createElement("li");
@@ -100,8 +101,10 @@ export const SideBar = (() => {
     select.addEventListener("change", (e) => {
         let folderID = "";
         const setFolderID = (array) => {
+            if(array.length === 0) return
             if(array.every(el => el.privateTitle === array[0].privateTitle)) {
-                return folderID = array[0].privateTitle
+                console.log(array);
+                return folderID = array[0].privateTitle;
             }else if(array.every(el => el.complete === true)) {
                 return folderID = button2.id
             }else {
@@ -112,14 +115,17 @@ export const SideBar = (() => {
             case "Sort by Title":
                 const folder1 = setFolderID(sortTaskByTittle(arrayToSort));
                 displayTaskToDOM(sortTaskByTittle(arrayToSort), tasksContainer, folder1);
+                //document.getElementById(folder1).dispatchEvent(newEvent);
                 break;
             case "Sort by Due Date":
                 const folder2 = setFolderID(sortTaskByDuDate(arrayToSort));
                 displayTaskToDOM(sortTaskByDuDate(arrayToSort), tasksContainer, folder2);
+                //document.getElementById(folder2).dispatchEvent(newEvent);
                 break;
             case "Sort by Priority":
                 const folder3 = setFolderID(sortTaskByDuDate(arrayToSort));
                 displayTaskToDOM(sortTaskByPriority(arrayToSort), tasksContainer, folder3);
+                //document.getElementById(folder3).dispatchEvent(newEvent);
                 break;
             default:
                 displayTaskToDOM(arrayToSort, tasksContainer, button1.id);
@@ -129,6 +135,7 @@ export const SideBar = (() => {
 
     
     displayTaskToDOM(allTask, tasksContainer, button1.id);
+    arrayToSort = [...allTask]
 
     //inbox instruction end
 
@@ -171,14 +178,13 @@ const displayProjectToDOM = ((ul) => {
             deleteProject(privateTitle);
             addProjectToLocalStorage();
             addTaskToLocalStorage();
-            console.log("true allProject", allProject)
+            console.log("true allProject", allProject);
             button3.dispatchEvent(newEvent);
             button1.dispatchEvent(newEvent);
         })
         li.appendChild(button);
         li.appendChild(btnDeleteProject);
         ul.appendChild(li);
-        console.log("in displayProjectToDOM", arrayButtonProject);
     })
     addProjectToDOM(ul);
 })
@@ -217,7 +223,7 @@ const addProjectToDOM = (ul) => {
     confirmButton.setAttribute("type", "submit");
     p.textContent = "New Project";
     buttonAddProject.textContent = "ADD PROJECT";
-    span.textContent = "name";
+    span.textContent = "name:";
     confirmButton.textContent = "Comfirm";
     cancelButton.textContent = "Cancel";
     buttonAddProject.addEventListener("click", e => {
@@ -285,6 +291,7 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
         task.classList.add("task");
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("id", "check-task");
+        taskTitle.setAttribute("id", "check-task-label");
         taskTitle.setAttribute("for", "check-task");
         taskTitle.innerHTML = el.complete === true ? `<s>${el.title}</s>`: el.title;
         editButton.innerHTML = "edit";
@@ -322,6 +329,7 @@ const displayTaskToDOM = (givenArray, container, folderID = "") => {
 }
 
 const addTAskToDOM = (nameProject) => {
+    //document.getElementById("task-container").setAttribute("inert", "");
     let newEvent = new Event("click");
     const addTaskButton = document.createElement("button");
     const formContainer = document.createElement("div");
@@ -416,6 +424,7 @@ const addTAskToDOM = (nameProject) => {
         e.preventDefault()
         resetValue();
         formContainer.toggleAttribute("hidden");
+        document.getElementById("task-container").removeAttribute("inert");
     })
     btnConfirm.addEventListener("click", (e) => {
         if(inputTitle.value === "" || inputDate.value === "" || inpuDescription.value === "" || inputPriority.value === "") {
@@ -426,13 +435,13 @@ const addTAskToDOM = (nameProject) => {
         displayTaskToDOM(filterTaskByProject(nameProject), tasksContainer);
         document.getElementById(nameProject).dispatchEvent(newEvent);
         addTaskToLocalStorage();
+        document.getElementById("task-container").removeAttribute("inert");
         e.preventDefault()
     })
 }
 
 const reditTask = (taskObject, title = "", description = "", date = "", priority = "", folderID) => {
-    console.log(taskObject);
-    console.log("priority parameter", priority);
+    //document.getElementById("task-container").setAttribute("inert", "");
     let newEvent = new Event("click");
     const formContainer = document.createElement("div");
     const form = document.createElement("form");
@@ -519,6 +528,7 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
     buttonValidationContainer.appendChild(btnCancel);
     btnCancel.addEventListener("click", () => {
         formContainer.toggleAttribute("hidden");
+        document.getElementById("task-container").removeAttribute("inert");
     });
 
     btnConfirm.addEventListener("click", () => {
@@ -531,6 +541,7 @@ const reditTask = (taskObject, title = "", description = "", date = "", priority
         console.log(inputPriority.value);
         document.getElementById(folderID).dispatchEvent(newEvent);
         addTaskToLocalStorage()
+        document.getElementById("task-container").removeAttribute("inert");
     });
 }
 

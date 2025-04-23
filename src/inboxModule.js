@@ -1,7 +1,6 @@
 import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, filterTaskByComplete, deleteTask} from "./taskModule.js";
 import { arrayInbox } from "./sideBarModule.js";
 import sideBar, {button1, button2, button3, arrayButtonProject, buttonAddProject} from "./sideBarModule.js";
-import { inputTest } from "./sideBarModule.js";
 
 
 

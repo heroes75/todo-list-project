@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 body, html {
     height: 100%;
@@ -31,6 +31,8 @@ ul {
     gap: 16px;
     width: clamp(250px, 10%, 20%);
     padding-top: 32px;
+    background-color: blue;
+    box-shadow: 5px 0 5px black;
 }
 
 #inbox-text {
@@ -51,18 +53,76 @@ ul {
 }
 
 .task {
-    height: 45px;
+    height: 65px;
     width: 95%;
     align-self: center;
     display: flex;
     justify-content: space-between;
     padding: 0.7rem;
+    background-color: green;
+    border-radius: 15px;
 }
 
 #checkbox-container, #button-container {
     display: flex;
     gap: 7px;
+    align-self: center;
 }
+
+#check-task-label {
+    font-size: 20px;
+}
+
+#edit-button, #delete-button {
+    width: 70px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+dialog {
+    width: 50%;
+    height: 30%;
+}
+
+#cancel-button, #confirm-button {
+    padding: 9px 13px 9px 13px;
+    border-radius: 15px;
+}
+
+#cancel-button {
+    background-color: red;
+}
+
+#confirm-button {
+    background-color: green;
+}
+
+#edit-button {
+    background-color: aqua;
+}
+
+#delete-button {
+    background-color: red;
+}
+
+#form-add-project {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label > span {
+    display: block;
+}
+#input {
+    height: 30px;
+    border-radius: 13px;
+}
+
+
 #box {
     display: flex;
     flex-basis: 100%;
@@ -72,6 +132,25 @@ button {
     background-color: transparent;
 }
 
+#form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+}
+
+#form-task {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#add-task-button {
+    /* text-align: center; */
+    margin: auto auto;
+    padding: 13px 17px 13px 17px;
+    background-color: aqua;
+    width: 100px;
+}
 #inbox {
     width: 100%;
 }

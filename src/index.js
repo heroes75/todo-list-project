@@ -1,9 +1,7 @@
 import "./styles.css";
-import { yearsToMonths, formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import allProject, {createProject, addProjectToAllProject} from "./projectModules";
-import allTask, {createTask, addTaskToAllTask, sortTaskByTittle, sortTaskByDuDate, sortTaskByPriority, filterTaskByProject, deleteTask} from "./taskModule.js";
+import allTask, {createTask, addTaskToAllTask} from "./taskModule.js";
 import sideBar from "./sideBarModule.js";
-import Inbox from "./inboxModule.js";
 
 
 
@@ -27,9 +25,7 @@ if (allProjectInLocal) {
   console.log("new allProject[1]()");
   console.log("new allProject[1]()", allProject);
 } else {
-  addProjectToAllProject(createProject("qwerty1"));
-  addProjectToAllProject(createProject("qwerty"));
-  addProjectToAllProject(createProject("qwerty3"));
+  addProjectToAllProject(createProject("Default"));
 }
 
 if (allTaskInLocal) {
@@ -40,11 +36,10 @@ if (allTaskInLocal) {
       addTaskToAllTask(createTask(el.privateTitle, el.title, el.description, el.dueDate, el.priority, el.complete))
     })
   } else {
-    console.log('User data not found in local storage');
-    addTaskToAllTask(createTask("qwerty1", "what do", "do nothing", new Date(1995, 0, 3, 3, 33), "High", false));
-    addTaskToAllTask(new allProject[0]("title", "description", new Date(1995, 8, 5, 9, 33), "High", false));
-    addTaskToAllTask(new allProject[1]("zzzzz", "description", new Date(1989, 1, 3, 5, 33), "Low", false));
-    addTaskToAllTask(new allProject[1]("aaaaa", "des123", new Date(1994, 11, 29, 9, 33), "Medium", true));
+    addTaskToAllTask(createTask("Default", "birthday of Jisoo", "singer", "2026-00-03T3:33", "High", false));
+    addTaskToAllTask(new allProject[0]("birthday of Giselle", "singer", "2025-09-10T3:33", "High", false));
+    addTaskToAllTask(new allProject[0]("anniversaire de Rei", "singer", "2026-01-03T3:33", "Low", false));
+    addTaskToAllTask(new allProject[0]("happy birthday of Princess of Akishino", "Princess", "2025-11-29T3:33", "High", false));
   }
 
   //addProjectToAllProject(createProject("qwerty1"));
